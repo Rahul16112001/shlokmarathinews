@@ -1,8 +1,12 @@
 (function() {
     const savedTheme = localStorage.getItem('admin_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.style.backgroundColor = savedTheme === 'dark' ? '#0b0f19' : '#f8fafc';
     document.addEventListener('DOMContentLoaded', () => {
-        if (document.body) document.body.setAttribute('data-theme', savedTheme);
+        if (document.body) {
+            document.body.setAttribute('data-theme', savedTheme);
+            document.body.style.backgroundColor = savedTheme === 'dark' ? '#0b0f19' : '#f8fafc';
+        }
     });
 })();
 
@@ -134,7 +138,11 @@ function initThemeToggle() {
             const activeTheme = document.documentElement.getAttribute('data-theme') || 'light';
             const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', nextTheme);
-            if (document.body) document.body.setAttribute('data-theme', nextTheme);
+            document.documentElement.style.backgroundColor = nextTheme === 'dark' ? '#0b0f19' : '#f8fafc';
+            if (document.body) {
+                document.body.setAttribute('data-theme', nextTheme);
+                document.body.style.backgroundColor = nextTheme === 'dark' ? '#0b0f19' : '#f8fafc';
+            }
             localStorage.setItem('admin_theme', nextTheme);
             btn.innerHTML = `<i data-lucide="${nextTheme === 'dark' ? 'sun' : 'moon'}"></i>`;
             if (window.lucide) window.lucide.createIcons();

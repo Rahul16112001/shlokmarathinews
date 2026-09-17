@@ -58,6 +58,7 @@
 html {
   max-width: 100%;
   overflow-x: hidden;
+  background-color: var(--admin-bg);
 }
 
 body {
@@ -624,6 +625,11 @@ button {
   to { transform: rotate(360deg); }
 }
 
+@keyframes adminPageFadeIn {
+  from { opacity: 0.92; }
+  to { opacity: 1; }
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1111,7 +1117,7 @@ button {
 .content-wrapper {
   padding: 2rem;
   flex: 1;
-  animation: fadeUp 0.3s ease-out;
+  animation: adminPageFadeIn 0.15s ease-out;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -1704,6 +1710,11 @@ tbody tr:nth-child(even):hover { background-color: var(--admin-surface-hover); }
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 4px;
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
 }
 
 @keyframes shimmer {
