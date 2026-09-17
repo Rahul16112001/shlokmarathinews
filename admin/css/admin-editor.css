@@ -1,0 +1,292 @@
+/* /admin/css/admin-editor.css */
+
+.editor-wrapper {
+  max-width: 1420px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px;
+  align-items: start;
+}
+
+.editor-canvas {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--admin-card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.editor-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-field-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-text-muted);
+}
+
+.editor-headline-input {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.4;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-input-bg);
+  color: var(--admin-text-main);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  letter-spacing: -0.02em;
+  font-family: inherit;
+}
+
+.editor-headline-input:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.editor-headline-input::placeholder {
+  color: var(--admin-text-light);
+  font-weight: 500;
+}
+
+.editor-permalink-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--admin-surface-hover);
+  border: 1px solid var(--admin-border);
+}
+
+.editor-permalink-prefix {
+  font-size: 12.5px;
+  color: var(--admin-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Monaco, monospace;
+  white-space: nowrap;
+}
+
+.editor-slug-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: ui-monospace, SFMono-Regular, Monaco, monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--admin-text-main);
+  outline: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.editor-slug-input:focus {
+  background: var(--admin-surface);
+  box-shadow: 0 0 0 1px var(--admin-primary);
+}
+
+.editor-excerpt-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-input-bg);
+  color: var(--admin-text-main);
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 76px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.editor-excerpt-textarea:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--admin-surface-hover);
+  border: 1px solid var(--admin-border);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.tb-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tb-btn:hover {
+  background: var(--admin-surface);
+  color: var(--admin-text-main);
+  border-color: var(--admin-border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.tb-btn:active {
+  transform: scale(0.94);
+}
+
+.tb-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--admin-border);
+  margin: 0 4px;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 480px;
+  padding: 20px;
+  font-size: 15px;
+  line-height: 1.75;
+  border-radius: 0 0 12px 12px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-input-bg);
+  color: var(--admin-text-main);
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.editor-textarea:focus {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.editor-sidebar-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 86px;
+}
+
+.editor-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--admin-card-shadow);
+}
+
+.editor-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.editor-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--admin-text-main);
+}
+
+.editor-flag-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--admin-border-subtle, var(--admin-border));
+}
+
+.editor-flag-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.editor-flag-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-flag-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--admin-text-main);
+}
+
+.editor-flag-desc {
+  font-size: 11.5px;
+  color: var(--admin-text-muted);
+}
+
+.editor-dropzone {
+  border: 2px dashed var(--admin-border);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--admin-surface-hover);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.editor-dropzone:hover {
+  border-color: var(--admin-primary);
+  background: var(--admin-primary-light);
+}
+
+.editor-preview-container {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface-hover);
+  position: relative;
+}
+
+.editor-preview-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+  .editor-sidebar-deck {
+    position: static;
+  }
+}

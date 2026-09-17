@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Articles - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>
+        try {
+            const savedTheme = localStorage.getItem('admin_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav"></nav>
+            <div class="sidebar-footer"></div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" id="topbar-search" placeholder="Search newsroom...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="admin-avatar-initial">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted);">Content Studio</span>
+                            <span style="font-size: 12px; color: var(--admin-text-light);">/</span>
+                            <span style="font-size: 12px; font-weight: 600; color: var(--admin-primary);">Articles</span>
+                        </div>
+                        <h1 style="margin: 0 0 4px 0; font-size: 26px; font-weight: 800; color: var(--admin-text-main); letter-spacing: -0.03em;">Articles Directory</h1>
+                        <p style="margin: 0; font-size: 13.5px; color: var(--admin-text-muted);">Draft, publish, filter, and curate news articles for Marathi readers.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button id="btn-refresh-articles" class="btn btn-secondary" title="Refresh articles list">
+                            <i data-lucide="rotate-cw" style="width: 15px; height: 15px;"></i> Refresh
+                        </button>
+                        <a href="article-editor.html" class="btn btn-primary">
+                            <i data-lucide="plus" style="width: 16px; height: 16px;"></i> New Article
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cms-kpi-grid">
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                            <i data-lucide="file-text" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="kpi-total">0</div>
+                            <div class="cms-kpi-lbl">Total Articles</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                            <i data-lucide="check-circle-2" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="kpi-published">0</div>
+                            <div class="cms-kpi-lbl">Published Live</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(100, 116, 139, 0.1); color: #64748b;">
+                            <i data-lucide="file-edit" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="kpi-drafts">0</div>
+                            <div class="cms-kpi-lbl">In Drafts</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                            <i data-lucide="flame" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="kpi-breaking">0</div>
+                            <div class="cms-kpi-lbl">Breaking & Urgent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cms-filter-strip">
+                    <div class="cms-tabs" id="status-tabs">
+                        <button class="cms-tab-btn active" data-status="all">
+                            All <span class="cms-tab-count" id="tab-count-all">0</span>
+                        </button>
+                        <button class="cms-tab-btn" data-status="published">
+                            Published <span class="cms-tab-count" id="tab-count-published">0</span>
+                        </button>
+                        <button class="cms-tab-btn" data-status="draft">
+                            Drafts <span class="cms-tab-count" id="tab-count-draft">0</span>
+                        </button>
+                        <button class="cms-tab-btn" data-status="breaking">
+                            Breaking <span class="cms-tab-count" id="tab-count-breaking">0</span>
+                        </button>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                        <select id="filter-category" class="cms-select">
+                            <option value="">All Categories</option>
+                        </select>
+                        <div class="cms-search-box">
+                            <i data-lucide="search"></i>
+                            <input type="search" id="search-articles" class="cms-search-input" placeholder="Search by title or slug...">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--admin-surface); border-radius: 16px; border: 1px solid var(--admin-border); box-shadow: var(--admin-card-shadow); overflow: hidden;">
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 960px;">
+                            <thead>
+                                <tr style="background: var(--admin-surface-hover); border-bottom: 1px solid var(--admin-border);">
+                                    <th style="padding: 14px 18px; width: 44px; text-align: center;">
+                                        <input type="checkbox" id="th-select-all" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--admin-primary);">
+                                    </th>
+                                    <th style="padding: 14px 16px; width: 80px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Cover</th>
+                                    <th style="padding: 14px 16px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Article Headline</th>
+                                    <th style="padding: 14px 16px; width: 140px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Category</th>
+                                    <th style="padding: 14px 16px; width: 120px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+                                    <th style="padding: 14px 16px; width: 130px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Date</th>
+                                    <th style="padding: 14px 18px; width: 120px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articles-tbody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="skeleton skeleton-text" style="height: 48px; margin: 24px;"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="padding: 14px 20px; border-top: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; background: var(--admin-surface); flex-wrap: wrap; gap: 12px;">
+                        <span id="page-info" style="font-size: 13px; font-weight: 500; color: var(--admin-text-muted);">Showing 0 articles</span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button id="prev-page" class="btn btn-secondary btn-sm" disabled>
+                                <i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i> Previous
+                            </button>
+                            <span id="page-num-pill" style="font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 8px; background: var(--admin-surface-hover); border: 1px solid var(--admin-border); color: var(--admin-text-main);">1</span>
+                            <button id="next-page" class="btn btn-secondary btn-sm" disabled>
+                                Next <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bulk-bar" class="bulk-bar">
+                    <span id="bulk-count" style="font-size: 13.5px; font-weight: 600; color: var(--admin-text-main);">0 selected</span>
+                    <button id="btn-bulk-publish" class="btn btn-secondary btn-sm">
+                        <i data-lucide="check" style="width: 14px; height: 14px;"></i> Mark Published
+                    </button>
+                    <button id="btn-bulk-delete" class="btn btn-danger btn-sm">
+                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i> Delete Selected
+                    </button>
+                    <button id="btn-bulk-clear" class="btn btn-ghost btn-sm" style="padding: 6px 10px;">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin-supabase.js?v=2.6.0"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js?v=2.6.0"></script>
+    <script src="js/admin-articles.js?v=2.6.0"></script>
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
+

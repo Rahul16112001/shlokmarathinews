@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live TV - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>try{const t=localStorage.getItem('admin_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="layout-dashboard"></i></span> Dashboard
+                </a>
+                <a href="articles.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="file-text"></i></span> Articles
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="folder"></i></span> Categories
+                </a>
+                <a href="videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="video"></i></span> Videos
+                </a>
+                <a href="short-videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="smartphone"></i></span> Short Videos
+                </a>
+                <a href="breaking-news.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="radio"></i></span> Breaking News
+                </a>
+                <a href="gallery.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="image"></i></span> Gallery
+                </a>
+                <a href="live-tv.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="tv"></i></span> Live TV
+                </a>
+                <a href="users.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="users"></i></span> Users & Team
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="settings"></i></span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" style="width:100%; border:none; background:transparent; justify-content: flex-start; margin:0;" onclick="adminLogout()">
+                    <span class="icon-box"><i data-lucide="log-out"></i></span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <style>
+                    .live-tv-grid {
+                        display: grid; grid-template-columns: 1fr 1.2fr; gap: 28px; align-items: flex-start;
+                    }
+                    @media (max-width: 960px) {
+                        .live-tv-grid { grid-template-columns: 1fr; }
+                    }
+                    .broadcast-card {
+                        background: var(--admin-surface); border: 1px solid var(--admin-border);
+                        border-radius: 16px; box-shadow: var(--shadow-sm); overflow: hidden;
+                    }
+                    .broadcast-card-header {
+                        padding: 18px 24px; border-bottom: 1px solid var(--admin-border);
+                        display: flex; justify-content: space-between; align-items: center;
+                    }
+                    .broadcast-card-body {
+                        padding: 24px;
+                    }
+                    .live-status-pill {
+                        display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+                        border-radius: 99px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.5px;
+                    }
+                    .live-status-pill.on-air {
+                        background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);
+                    }
+                    .live-status-pill.offline {
+                        background: var(--admin-surface-hover); color: var(--admin-text-muted); border: 1px solid var(--admin-border);
+                    }
+                    .pulse-red-dot {
+                        width: 7px; height: 7px; border-radius: 50%; background: #ef4444;
+                        box-shadow: 0 0 8px rgba(239, 68, 68, 0.8); animation: liveRedPulse 1.8s infinite;
+                    }
+                    @keyframes liveRedPulse {
+                        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+                        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+                        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+                    }
+                    .dot-offline {
+                        width: 7px; height: 7px; border-radius: 50%; background: #94a3b8;
+                    }
+                    .player-ratio-box {
+                        width: 100%; aspect-ratio: 16/9; background: #000000; border-radius: 12px;
+                        overflow: hidden; border: 1px solid var(--admin-border);
+                    }
+                    .stream-meta-row {
+                        display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;
+                    }
+                    .stream-meta-badge {
+                        padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+                        background: var(--admin-surface-hover); border: 1px solid var(--admin-border);
+                        color: var(--admin-text-muted); display: flex; align-items: center; gap: 6px;
+                    }
+                </style>
+
+                <div style="margin-bottom: 28px;">
+                    <h1 style="margin: 0 0 6px 0; font-size: 26px; font-weight: 800; color: var(--admin-text-main); letter-spacing: -0.5px;">Live TV Broadcast</h1>
+                    <p style="margin: 0; font-size: 14px; color: var(--admin-text-muted);">Manage real-time 24/7 news stream routing and player configurations.</p>
+                </div>
+
+                <div class="live-tv-grid">
+                    <div class="broadcast-card">
+                        <div class="broadcast-card-header">
+                            <div>
+                                <h2 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--admin-text-main);">Stream Configuration</h2>
+                                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--admin-text-muted);">Channel feed connection details</p>
+                            </div>
+                        </div>
+                        <div class="broadcast-card-body">
+                            <div id="live-tv-alert" class="alert" style="display:none; margin-bottom: 1.25rem;"></div>
+
+                            <form id="live-tv-form" style="display: flex; flex-direction: column; gap: 18px;">
+                                <input type="hidden" id="channel-id">
+
+                                <div>
+                                    <label class="form-label" for="channel-name">Channel Title</label>
+                                    <input type="text" id="channel-name" class="form-input" required placeholder="e.g. Shlok Marathi Live 24x7">
+                                </div>
+
+                                <div>
+                                    <label class="form-label" for="live-url">YouTube Stream URL</label>
+                                    <input type="url" id="live-url" class="form-input" required placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
+                                    <span style="font-size: 11.5px; color: var(--admin-text-muted); margin-top: 4px; display: block;">Supports standard YouTube watch links, live links, and share URLs.</span>
+                                </div>
+
+                                <div>
+                                    <label class="form-label" for="platform">Streaming Platform</label>
+                                    <select id="platform" class="form-input" disabled style="background: var(--admin-surface-hover);">
+                                        <option value="youtube" selected>YouTube Live Embed (HLS Compliant)</option>
+                                    </select>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-radius: 10px; background: var(--admin-surface-hover); border: 1px solid var(--admin-border);">
+                                    <div>
+                                        <div style="font-size: 13.5px; font-weight: 600; color: var(--admin-text-main);">Broadcast Active</div>
+                                        <div style="font-size: 12px; color: var(--admin-text-muted);">Show stream badge on public website</div>
+                                    </div>
+                                    <label class="saas-toggle">
+                                        <input type="checkbox" id="is-active">
+                                        <span class="toggle-track"></span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="margin-top: 6px; padding: 11px 18px; font-size: 14px; font-weight: 600; border-radius: 10px;">
+                                    Save Stream Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="broadcast-card">
+                        <div class="broadcast-card-header">
+                            <div>
+                                <h2 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--admin-text-main);">Broadcast Monitor</h2>
+                                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--admin-text-muted);">Real-time stream feed test</p>
+                            </div>
+                            <div id="stream-status-badge" class="live-status-pill offline">
+                                <span class="dot-offline"></span><span>STANDBY / OFFLINE</span>
+                            </div>
+                        </div>
+                        <div class="broadcast-card-body">
+                            <div class="player-ratio-box" id="preview-player-container">
+                                <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--admin-text-muted); padding: 2rem; text-align: center;">
+                                    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom: 12px; opacity: 0.7;"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                                    <div style="font-size: 14px; font-weight: 600; color: var(--admin-text-main); margin-bottom: 4px;">No Stream Configured</div>
+                                    <div style="font-size: 12px;">Enter a valid YouTube Live URL on the left to activate player preview.</div>
+                                </div>
+                            </div>
+                            <div class="stream-meta-row">
+                                <div class="stream-meta-badge">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A8 8 0 0 1 4.07 10H5a1 1 0 0 1 0 2h-.93A6 6 0 0 0 9 17.93V17a1 1 0 0 1 2 0v.93A8 8 0 0 1 18.93 12H18a1 1 0 0 1 0-2h.93A8 8 0 0 1 13 4.07V5a1 1 0 0 1-2 0V4.07A8 8 0 0 1 4.07 10H5a1 1 0 0 1 0 2h-.93A8 8 0 0 1 11 18.93V18a1 1 0 0 1 2 0v.93z"></path></svg>
+                                    Protocol: HTTPS/HLS
+                                </div>
+                                <div class="stream-meta-badge">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                                    Aspect: 16:9 HD
+                                </div>
+                                <div class="stream-meta-badge">
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    Latency: Ultra-Low
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin-supabase.js"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-live-tv.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

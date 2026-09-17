@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Categories & Desks - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>
+        try {
+            const savedTheme = localStorage.getItem('admin_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav"></nav>
+            <div class="sidebar-footer"></div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" placeholder="Search newsroom...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="admin-avatar-initial">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--admin-text-muted);">Content Studio</span>
+                            <span style="font-size: 12px; color: var(--admin-text-light);">/</span>
+                            <span style="font-size: 12px; font-weight: 600; color: var(--admin-primary);">Taxonomy</span>
+                        </div>
+                        <h1 style="margin: 0 0 4px 0; font-size: 26px; font-weight: 800; color: var(--admin-text-main); letter-spacing: -0.03em;">Categories & Desks</h1>
+                        <p style="margin: 0; font-size: 13.5px; color: var(--admin-text-muted);">Configure editorial desks, navigation topics, and URL taxonomy for the portal.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button id="btn-refresh-categories" class="btn btn-secondary" title="Refresh category list">
+                            <i data-lucide="rotate-cw" style="width: 15px; height: 15px;"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cms-kpi-grid">
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                            <i data-lucide="folder" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="cat-total">0</div>
+                            <div class="cms-kpi-lbl">Total Categories</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                            <i data-lucide="check-circle" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="cat-active">0</div>
+                            <div class="cms-kpi-lbl">Active Desks</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(100, 116, 139, 0.1); color: #64748b;">
+                            <i data-lucide="eye-off" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="cat-inactive">0</div>
+                            <div class="cms-kpi-lbl">Hidden / Inactive</div>
+                        </div>
+                    </div>
+                    <div class="cms-kpi-card">
+                        <div class="cms-kpi-icon" style="background: rgba(220, 38, 38, 0.1); color: var(--admin-primary);">
+                            <i data-lucide="layers" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <div>
+                            <div class="cms-kpi-val" id="cat-articles">0</div>
+                            <div class="cms-kpi-lbl">Tagged Articles</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: minmax(320px, 380px) 1fr; gap: 24px; align-items: flex-start;">
+                    
+                    <div class="cat-studio-card" id="studio-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--admin-primary-light); color: var(--admin-primary); display: flex; align-items: center; justify-content: center;">
+                                    <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+                                </div>
+                                <h2 id="studio-heading" style="margin: 0; font-size: 16px; font-weight: 700; color: var(--admin-text-main);">Category Studio</h2>
+                            </div>
+                            <span id="studio-mode-pill" style="font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: var(--admin-surface-hover); border: 1px solid var(--admin-border); color: var(--admin-text-muted);">Create</span>
+                        </div>
+
+                        <div class="cat-preview-box">
+                            <div>
+                                <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--admin-text-muted); display: block; margin-bottom: 4px;">Live Tag Preview</span>
+                                <span class="badge-tag" id="preview-pill" style="font-size: 13px; font-weight: 700; color: var(--admin-text-main);">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--admin-primary);"></span>
+                                    <span id="preview-name">ताज्या बातम्या</span>
+                                </span>
+                            </div>
+                            <span id="preview-slug" style="font-family: ui-monospace, SFMono-Regular, Monaco, monospace; font-size: 11.5px; color: var(--admin-text-muted); background: var(--admin-surface); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--admin-border);">
+                                /category/breaking
+                            </span>
+                        </div>
+
+                        <form id="category-form" style="display: flex; flex-direction: column; gap: 18px;">
+                            <input type="hidden" id="category-id">
+
+                            <div>
+                                <label class="form-label" for="category-name" style="margin-bottom: 6px; display: block; font-size: 13px; font-weight: 600; color: var(--admin-text-main);">
+                                    Category Name (मराठी / English)
+                                </label>
+                                <input type="text" id="category-name" class="form-input" placeholder="e.g. महाराष्ट्र, क्रीडा, राजकारण" required style="width: 100%; padding: 10px 14px; border-radius: 10px; font-size: 14px;">
+                            </div>
+
+                            <div>
+                                <label class="form-label" for="category-slug" style="margin-bottom: 6px; display: block; font-size: 13px; font-weight: 600; color: var(--admin-text-main);">
+                                    Slug / URL Identifier
+                                </label>
+                                <input type="text" id="category-slug" class="form-input" placeholder="e.g. maharashtra-news" required style="width: 100%; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-family: ui-monospace, SFMono-Regular, Monaco, monospace;">
+                                <span style="font-size: 11.5px; color: var(--admin-text-muted); margin-top: 4px; display: block;">shlokmarathinews.com/category/<strong><span id="slug-hint">slug</span></strong></span>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: var(--admin-surface-hover); border: 1px solid var(--admin-border);">
+                                <div>
+                                    <span style="font-size: 13.5px; font-weight: 600; color: var(--admin-text-main); display: block;">Status Active</span>
+                                    <span style="font-size: 11.5px; color: var(--admin-text-muted);">Visible in top navbar & stories</span>
+                                </div>
+                                <label class="saas-toggle">
+                                    <input type="checkbox" id="category-active" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 8px;">
+                                <button type="submit" id="btn-save-cat" class="btn btn-primary" style="flex: 1; padding: 10px 16px;">
+                                    <i data-lucide="check" style="width: 15px; height: 15px;"></i> Save Category
+                                </button>
+                                <button type="button" id="btn-cancel" class="btn btn-secondary" style="display: none; padding: 10px 14px;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div style="background: var(--admin-surface); border-radius: 16px; border: 1px solid var(--admin-border); box-shadow: var(--admin-card-shadow); overflow: hidden;">
+                        
+                        <div style="padding: 16px 20px; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; background: var(--admin-surface); flex-wrap: wrap; gap: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 15px; font-weight: 700; color: var(--admin-text-main);">Editorial Desks</span>
+                                <span id="directory-count" class="cms-tab-count">0 items</span>
+                            </div>
+                            <div class="cms-search-box" style="min-width: 220px;">
+                                <i data-lucide="search"></i>
+                                <input type="search" id="search-categories" class="cms-search-input" placeholder="Filter categories...">
+                            </div>
+                        </div>
+
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 580px;">
+                                <thead>
+                                    <tr style="background: var(--admin-surface-hover); border-bottom: 1px solid var(--admin-border);">
+                                        <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Desk Name</th>
+                                        <th style="padding: 12px 18px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Slug</th>
+                                        <th style="padding: 12px 18px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Articles</th>
+                                        <th style="padding: 12px 18px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Visibility</th>
+                                        <th style="padding: 12px 20px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.05em; text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categories-tbody">
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="skeleton skeleton-text" style="height: 38px; margin: 20px;"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin-supabase.js?v=2.6.0"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js?v=2.6.0"></script>
+    <script src="js/admin-categories.js?v=2.6.0"></script>
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
+

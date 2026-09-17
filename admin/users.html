@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users & Team - Shlok Marathi News CMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>try{const t=localStorage.getItem('admin_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="layout-dashboard"></i></span> Dashboard
+                </a>
+                <a href="articles.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="file-text"></i></span> Articles
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="folder"></i></span> Categories
+                </a>
+                <a href="videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="video"></i></span> Videos
+                </a>
+                <a href="short-videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="smartphone"></i></span> Short Videos
+                </a>
+                <a href="breaking-news.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="radio"></i></span> Breaking News
+                </a>
+                <a href="gallery.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="image"></i></span> Gallery
+                </a>
+                <a href="live-tv.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="tv"></i></span> Live TV
+                </a>
+                <a href="users.html" class="nav-item active">
+                    <span class="icon-box"><i data-lucide="users"></i></span> Users & Team
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="settings"></i></span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" style="width:100%; border:none; background:transparent; justify-content: flex-start; margin:0;" onclick="adminLogout()">
+                    <span class="icon-box"><i data-lucide="log-out"></i></span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" id="sidebar-toggle" aria-label="Toggle menu">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" id="search-users" placeholder="Search by name, email or ID...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-secondary" onclick="exportUsersCSV()" style="padding: 0.5rem 0.875rem; font-size: 13px;" title="Export user list as CSV">
+                        <i data-lucide="download" style="width:15px;height:15px;margin-right:6px;"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="openAddModal()" style="padding: 0.5rem 1rem; font-size: 13px;">
+                        <i data-lucide="user-plus" style="width:15px;height:15px;margin-right:6px;"></i> Add User
+                    </button>
+                    <button class="icon-btn" onclick="loadUsers()" title="Refresh records">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="name" id="admin-name">Admin User</span>
+                            <span class="role">Administrator</span>
+                        </div>
+                        <div class="user-avatar" id="admin-avatar-initial">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h1 style="font-size: 1.625rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.25rem; color: var(--admin-text-main);">Users & Access Control</h1>
+                        <p style="color: var(--admin-text-muted); font-size: 0.875rem;">Manage registered audiences, editorial staff, and administrative CMS privileges.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="filter-pill-group">
+                            <button class="filter-pill active" data-filter="all">All <span id="pill-count-all">(-)</span></button>
+                            <button class="filter-pill" data-filter="admin">Admins <span id="pill-count-admin">(-)</span></button>
+                            <button class="filter-pill" data-filter="user">Readers <span id="pill-count-user">(-)</span></button>
+                            <button class="filter-pill" data-filter="active">Active <span id="pill-count-active">(-)</span></button>
+                            <button class="filter-pill" data-filter="suspended">Suspended <span id="pill-count-suspended">(-)</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-metrics" style="margin-bottom: 2rem;">
+                    <div class="metric-card" style="border-top: 3px solid #6366f1;">
+                        <div class="metric-top">
+                            <span class="metric-label">Total Accounts</span>
+                            <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+                                <i data-lucide="users"></i>
+                            </div>
+                        </div>
+                        <div class="metric-number" id="stat-total-users">-</div>
+                        <span class="metric-trend trend-pill-neutral">Platform Directory</span>
+                    </div>
+
+                    <div class="metric-card" style="border-top: 3px solid #dc2626;">
+                        <div class="metric-top">
+                            <span class="metric-label">Administrators</span>
+                            <div class="metric-icon-wrap" style="background: rgba(220, 38, 38, 0.15); color: #ef4444;">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                        </div>
+                        <div class="metric-number" id="stat-admin-users">-</div>
+                        <span class="metric-trend trend-pill-up">Full CMS Access</span>
+                    </div>
+
+                    <div class="metric-card" style="border-top: 3px solid #10b981;">
+                        <div class="metric-top">
+                            <span class="metric-label">Public Readers</span>
+                            <div class="metric-icon-wrap" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                        </div>
+                        <div class="metric-number" id="stat-reader-users">-</div>
+                        <span class="metric-trend trend-pill-up">Active Subscribers</span>
+                    </div>
+
+                    <div class="metric-card" style="border-top: 3px solid #f59e0b;">
+                        <div class="metric-top">
+                            <span class="metric-label">New (30 Days)</span>
+                            <div class="metric-icon-wrap" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+                        </div>
+                        <div class="metric-number" id="stat-new-users">-</div>
+                        <span class="metric-trend trend-pill-up">Recent Growth</span>
+                    </div>
+                </div>
+
+                <div class="bento-table-card">
+                    <div class="table-card-header" style="flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h2 class="table-card-title">User Accounts Directory</h2>
+                            <p class="table-card-subtitle" id="user-results-count">Showing verified accounts synchronized from Supabase Auth.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label for="sort-users" style="font-size: 12px; font-weight: 600; color: var(--admin-text-muted);">Sort By:</label>
+                            <select id="sort-users" class="form-input" style="padding: 6px 12px; font-size: 13px; width: auto;">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="name">Name (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">
+                                        <input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll(this)" title="Select all on this page">
+                                    </th>
+                                    <th>User Profile</th>
+                                    <th>Role & Access</th>
+                                    <th>Status</th>
+                                    <th>Registered Date</th>
+                                    <th>User ID</th>
+                                    <th style="width: 150px; text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 3rem 1rem;">
+                                        <div class="spinner" style="display: inline-block; width: 30px; height: 30px; border-width: 3px; border-color: var(--admin-primary); border-top-color: transparent;"></div>
+                                        <div style="margin-top: 12px; color: var(--admin-text-muted); font-size: 13px; font-weight: 500;">Loading user records...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-card-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-top: 1px solid var(--admin-border); flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label for="select-page-size" style="font-size: 13px; color: var(--admin-text-muted);">Rows per page:</label>
+                            <select id="select-page-size" class="form-input" style="width: auto; padding: 4px 8px; font-size: 13px;">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span id="page-indicator" style="font-size: 13px; color: var(--admin-text-muted); font-weight: 500;">Page 1 of 1</span>
+                            <div style="display: flex; gap: 6px;">
+                                <button id="btn-prev-page" class="btn btn-secondary" onclick="changePage(-1)" style="padding: 6px 12px; font-size: 13px;" disabled>Previous</button>
+                                <button id="btn-next-page" class="btn btn-secondary" onclick="changePage(1)" style="padding: 6px 12px; font-size: 13px;" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="edit-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Manage User Account</h3>
+                <button class="modal-close-btn" onclick="closeEditModal()" aria-label="Close modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="edit-user-form">
+                <div class="modal-body">
+                    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; padding: 14px; background: var(--admin-surface-hover); border-radius: 12px; border: 1px solid var(--admin-border);">
+                        <div class="avatar-circle" id="edit-user-avatar" style="width: 48px; height: 48px; font-size: 18px; background: rgba(99, 102, 241, 0.2); color: #818cf8; border-color: rgba(99, 102, 241, 0.4);">
+                            U
+                        </div>
+                        <div>
+                            <div id="edit-user-id" style="font-family: monospace; font-size: 11px; color: var(--admin-text-muted); margin-bottom: 2px;"></div>
+                            <div style="font-size: 12px; color: var(--admin-text-muted);">Modify user profile details and role-based permissions.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="edit-user-name">Full Name</label>
+                        <input type="text" id="edit-user-name" class="form-input" placeholder="User Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="edit-user-email">Email Address</label>
+                        <input type="email" id="edit-user-email" class="form-input" readonly style="opacity: 0.7; cursor: not-allowed;">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">System Role & Permissions</label>
+                        
+                        <label class="role-radio-card" id="card-role-user" onclick="selectRole('user')">
+                            <input type="radio" name="user-role" id="role-user" value="user" checked>
+                            <div>
+                                <div style="font-weight: 600; font-size: 14px; color: var(--admin-text-main);">Reader Account</div>
+                                <div style="font-size: 12px; color: var(--admin-text-muted); margin-top: 2px;">Can browse stories, bookmark articles, and manage their personal reading profile.</div>
+                            </div>
+                        </label>
+
+                        <label class="role-radio-card" id="card-role-admin" onclick="selectRole('admin')">
+                            <input type="radio" name="user-role" id="role-admin" value="admin">
+                            <div>
+                                <div style="font-weight: 600; font-size: 14px; color: var(--admin-text-main); display: flex; align-items: center; gap: 8px;">
+                                    Administrator
+                                    <span style="font-size: 10px; background: rgba(220, 38, 38, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(220, 38, 38, 0.3);">FULL ACCESS</span>
+                                </div>
+                                <div style="font-size: 12px; color: var(--admin-text-muted); margin-top: 2px;">Full access to publish news, manage videos, edit categories, and invite team members.</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="edit-user-status">Account Status</label>
+                        <select id="edit-user-status" class="form-input">
+                            <option value="active">Active (Full Reading/CMS Access)</option>
+                            <option value="suspended">Suspended (Blocked Access)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--admin-border);">
+                        <label class="form-label">Security & Authentication</label>
+                        <button type="button" class="btn btn-secondary" onclick="sendUserPasswordReset()" style="width: 100%; justify-content: center;">
+                            <i data-lucide="key" style="width: 15px; height: 15px; margin-right: 6px;"></i> Send Password Reset Email
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="save-user-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="add-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3>Add New User / Staff</h3>
+                <button class="modal-close-btn" onclick="closeAddModal()" aria-label="Close modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="add-user-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="add-user-name">Full Name</label>
+                        <input type="text" id="add-user-name" class="form-input" placeholder="e.g. Rahul Patil" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="add-user-email">Email Address</label>
+                        <input type="email" id="add-user-email" class="form-input" placeholder="editor@shlokmarathi.news" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="add-user-password">Password</label>
+                        <input type="password" id="add-user-password" class="form-input" placeholder="Minimum 6 characters" minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="add-user-role">Role Assignment</label>
+                        <select id="add-user-role" class="form-input">
+                            <option value="user">Reader (Standard Account)</option>
+                            <option value="admin">Administrator / Editor (CMS Access)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="add-user-submit-btn">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="bulk-actions-bar" id="bulk-actions-bar">
+        <span class="bulk-count" id="bulk-count">0 users selected</span>
+        <button class="bulk-btn" onclick="bulkSetRole('admin')">
+            <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> Make Admin
+        </button>
+        <button class="bulk-btn" onclick="bulkSetRole('user')">
+            <i data-lucide="user" style="width: 14px; height: 14px;"></i> Make Reader
+        </button>
+        <button class="bulk-btn" onclick="bulkToggleStatus()">
+            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Toggle Status
+        </button>
+        <button class="bulk-btn bulk-btn-danger" onclick="bulkDeleteUsers()">
+            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i> Delete Selected
+        </button>
+        <button class="bulk-btn" onclick="clearBulkSelection()" style="background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-muted);">
+            Clear
+        </button>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/admin-supabase.js?v=2.6.5"></script>
+    <script src="js/admin-auth.js?v=2.6.5"></script>
+    <script src="js/admin-nav.js?v=2.6.5"></script>
+    <script src="js/admin-users.js?v=2.6.5"></script>
+    <script>
+        if (window.lucide) lucide.createIcons();
+    </script>
+</body>
+</html>

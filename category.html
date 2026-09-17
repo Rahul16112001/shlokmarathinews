@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>श्रेणी | श्लोक मराठी न्यूज</title>
+  <meta name="description" content="श्लोक मराठी न्यूज — श्रेणीनुसार बातम्या." />
+  <link rel="canonical" href="https://shlokmarathi.news/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-experience="modern" data-page="category">
+  <header class="site-header-redesign aaj-tak-theme" id="site-header">
+    <!-- ROW 1: TOP UTILITY BAR (White) -->
+    <div class="at-row-1-utility">
+      <div class="container at-utility-inner">
+        <div class="at-util-left">
+          <time class="at-date" id="today-date">Aug 27, 2026 | 10:51 IST</time>
+          <div class="at-network-links">
+            <a href="#" class="at-net-link active">Aaj Tak</a>
+            <a href="#" class="at-net-link">ई-पेपर</a>
+            <a href="#" class="at-net-link">बातम्या</a>
+            <a href="#" class="at-net-link">India Today</a>
+            <a href="#" class="at-net-link">इंडिया टुडे हिंदी</a>
+            <a href="#" class="at-net-link">GNTTV</a>
+            <a href="#" class="at-net-link">Malayalam</a>
+            <a href="#" class="at-net-link">Business Today</a>
+            <a href="#" class="at-net-link">Lallantop</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: MAIN BRAND & NAV (Dark Blue) -->
+    <div class="at-row-2-brand">
+      <div class="container at-brand-inner">
+        <!-- LEFT: Hamburger & Logo -->
+        <div class="at-brand-left">
+          <button type="button" class="at-menu-btn" id="menu-toggle">
+            <i data-lucide="menu" style="width: 28px; height: 28px; stroke-width: 1.5px; color: white;"></i>
+          </button>
+          <div class="at-logo-wrapper">
+             <img src="./assits/shlokmrathi%20news%20logo.png" alt="Logo" class="at-main-logo">
+          </div>
+          <div class="at-brand-name">
+            <span class="at-brand-title">SHLOK</span>
+            <span class="at-brand-subtitle">Marathi News</span>
+          </div>
+        </div>
+        
+        <!-- CENTER: Navigation -->
+        <div class="at-brand-center">
+          <nav class="at-main-nav">
+            <a href="index.html" class="at-nav-link active">होम</a>
+            <a href="#" class="at-nav-link">ई-पेपर</a>
+            <a href="#" class="at-nav-link">भारत <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></a>
+            <a href="#" class="at-nav-link">मनोरंजन <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></a>
+            <a href="#" class="at-nav-link">धर्म <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></a>
+            <a href="#" class="at-nav-link">खेल <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></a>
+            <a href="#" class="at-nav-link">लाइफस्टाइल <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></a>
+          </nav>
+        </div>
+
+        <!-- RIGHT: Tools & Icons -->
+        <div class="at-brand-right">
+          <div class="at-edition-box">
+            <span class="at-edition-label">EDITION</span>
+            <div class="at-lang-dropdown">
+              <img src="https://flagcdn.com/w20/in.png" alt="IN" style="width: 16px; margin-right: 4px;"> IN <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>
+            </div>
+          </div>
+          <div class="at-tool-icons">
+            <a href="#" class="at-tool-btn" title="E-Paper">
+              <i data-lucide="newspaper"></i><span class="at-tool-text">E-PAPER</span>
+            </a>
+            <a href="#" class="at-tool-btn" title="Weather">
+              <i data-lucide="cloud-sun"></i><span class="at-tool-text">WEATHER</span>
+            </a>
+            <a href="#" class="at-tool-btn" title="Radio">
+              <i data-lucide="radio"></i><span class="at-tool-text">RADIO</span>
+            </a>
+            <button class="at-tool-btn at-bell-btn">
+              <i data-lucide="bell"></i>
+              <span class="at-bell-badge">20</span>
+            </button>
+            <a href="video.html" class="at-tool-btn at-live-btn">
+              <i data-lucide="tv"></i> LIVE
+            </a>
+            <button class="at-sign-in">Sign In <i data-lucide="user"></i></button>
+            <button class="at-tool-btn at-search-btn" id="search-open">
+              <i data-lucide="search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: BREAKING NEWS TICKER (Red) -->
+    <div class="at-row-3-ticker">
+      <div class="container at-ticker-inner">
+        <div class="at-ticker-label">
+          BREAKING NEWS
+        </div>
+        <div class="at-ticker-divider"></div>
+        <div class="at-ticker-content">
+          <div class="at-ticker-text-wrapper">
+            <span>विवेकानंद केंद्र के अध्यक्ष ए. बालकृष्णन के निधन पर PM मोदी ने जताया दुख</span>
+            <span>विवेकानंद केंद्र के अध्यक्ष ए. बालकृष्णन के निधन पर PM मोदी ने जताया दुख</span>
+          </div>
+        </div>
+        <button class="at-ticker-close"><i data-lucide="x" style="width:18px;height:18px;stroke-width:2px;"></i></button>
+      </div>
+    </div>
+
+    <!-- ROW 4: TOPICS CAROUSEL (Grey) -->
+    <div class="at-row-4-topics">
+      <div class="container at-topics-inner">
+        <button class="at-scroll-arrow left"><i data-lucide="chevron-left" style="width:16px;height:16px;"></i></button>
+        <div class="at-topics-scroll">
+          <a href="#" class="at-topic-pill">उठो अनारकली</a>
+          <a href="#" class="at-topic-pill">नेपाल बाढ़</a>
+          <a href="#" class="at-topic-pill">पीएम मोदी</a>
+          <a href="#" class="at-topic-pill">टॉक्सिक मूवी</a>
+          <a href="#" class="at-topic-pill">अंकित बालियान</a>
+          <a href="#" class="at-topic-pill">चंद्र ग्रहण</a>
+          <a href="#" class="at-topic-pill">जेन-Z</a>
+          <a href="#" class="at-topic-pill">डोनाल्ड ट्रम्प</a>
+          <a href="#" class="at-topic-pill">राहुल गांधी</a>
+          <a href="#" class="at-topic-pill">दिल्ली मौसम</a>
+          <a href="#" class="at-topic-pill">सोलह सोमवार व्रत कथा</a>
+          <a href="#" class="at-topic-pill">मानसून</a>
+        </div>
+        <button class="at-scroll-arrow right"><i data-lucide="chevron-right" style="width:16px;height:16px;"></i></button>
+      </div>
+    </div>
+  </header>
+  <div class="search-overlay" id="search-overlay" hidden>
+    <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-heading">
+      <div class="search-panel-head">
+        <h2 id="search-heading">शोधा</h2>
+        <button type="button" class="icon-btn" id="search-close" aria-label="शोध बंद करा">✕</button>
+      </div>
+      <label class="sr-only" for="search-input">बातमी शोधा</label>
+      <input type="search" id="search-input" placeholder="मुंबई, राजकारण, क्रीडा..." autocomplete="off" />
+      <div id="search-results" class="search-results"></div>
+    </div>
+  </div>
+
+  <div class="page-frame">
+    <aside class="rail-sidebar" id="rail-sidebar" aria-label="शॉर्टकट मेनू"></aside>
+
+    <div class="content-column">
+      <main id="main-content" class="page-wrap">
+    <div class="container">
+      <h1 class="page-title" id="category-title">श्रेणी</h1>
+      <div id="category-root"></div>
+    </div>
+      </main>
+    </div>
+  </div>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="script.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" id="site-footer">
+  <div class="site-footer-inner">
+    
+    <!-- BRAND AREA -->
+    <div class="sf-brand-area">
+      <div class="sf-brand-text">
+        <span class="sf-brand-shlok">SHLOK</span>
+        <span class="sf-brand-news">Marathi News</span>
+      </div>
+      <div class="sf-brand-tagline">महाराष्ट्राचा विश्वास, सत्य आणि स्पष्ट बातम्यांचे व्यासपीठ</div>
+    </div>
+
+    <!-- TOP UTILITY LINKS -->
+    <div class="sf-top-links">
+      <a href="#">About Us</a><span class="sf-sep">|</span>
+      <a href="#">Contact Us</a><span class="sf-sep">|</span>
+      <a href="#">Advertise With Us</a><span class="sf-sep">|</span>
+      <a href="#">Complaint Redressal</a><span class="sf-sep">|</span>
+      <a href="#">Investors</a><span class="sf-sep">|</span>
+      <a href="#">Rate Card</a><span class="sf-sep">|</span>
+      <a href="#">Privacy Policy</a><span class="sf-sep">|</span>
+      <a href="#">Terms &amp; Conditions</a><span class="sf-sep">|</span>
+      <a href="#">Correction Policy</a><span class="sf-sep">|</span>
+      <a href="#">Press Releases</a><span class="sf-sep">|</span>
+      <a href="#">Content Policy</a>
+    </div>
+
+    <!-- FIVE PREMIUM COLUMNS -->
+    <div class="sf-grid">
+      <div class="sf-col">
+        <h4 class="sf-col-title">NEWS</h4>
+        <div class="sf-links">
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>महाराष्ट्र</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>मुंबई</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>राजकारण</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>भारत</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>जग</a>
+        </div>
+      </div>
+      <div class="sf-col">
+        <h4 class="sf-col-title">BUSINESS</h4>
+        <div class="sf-links">
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>बिझनेस</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>तंत्रज्ञान</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>शिक्षण</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>नोकऱ्या</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>उपयुक्त साधने</a>
+        </div>
+      </div>
+      <div class="sf-col">
+        <h4 class="sf-col-title">ENTERTAINMENT</h4>
+        <div class="sf-links">
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>मनोरंजन</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>लाईफस्टाईल</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>चित्रपट</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>टीव्ही</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>ट्रेंडिंग</a>
+        </div>
+      </div>
+      <div class="sf-col">
+        <h4 class="sf-col-title">MEDIA</h4>
+        <div class="sf-links">
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>लाईव्ह न्यूज</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>व्हिडिओ</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>फोटो गॅलरी</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>वेब स्टोरीज</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>पॉडकास्ट</a>
+        </div>
+      </div>
+      <div class="sf-col">
+        <h4 class="sf-col-title">COMPANY</h4>
+        <div class="sf-links">
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>आमच्याबद्दल</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>संपर्क</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>जाहिरात</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>करिअर</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>अभिप्राय</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWSLETTER PANEL -->
+    <div class="sf-newsletter">
+      <div class="sf-nl-left">
+        <div class="sf-nl-icon-wrap">
+          <div class="sf-nl-ring"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <div class="sf-nl-text">
+          <div class="sf-nl-title">ताज्या बातम्यांशी जोडलेले रहा</div>
+          <div class="sf-nl-desc">महत्त्वाच्या बातम्या आणि अपडेट्स थेट आपल्या इनबॉक्समध्ये.</div>
+        </div>
+      </div>
+      <div class="sf-nl-right">
+        <input type="email" placeholder="आपला ईमेल" class="sf-nl-input">
+        <button class="sf-nl-btn">सबस्क्राईब करा</button>
+      </div>
+    </div>
+
+    <!-- TRENDING SECTION -->
+    <div class="sf-topics">
+      <div class="sf-topics-header">
+        <div class="sf-topics-title">ट्रेंडिंग</div>
+      </div>
+      <button class="sf-topics-scroll-btn left" onclick="scrollPills('sf-trending-list', -300)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="sf-topics-list" id="sf-trending-list">
+        <a href="#" class="sf-topic">महाराष्ट्र न्यूज</a>
+        <a href="#" class="sf-topic">मुंबई न्यूज</a>
+        <a href="#" class="sf-topic">मान्सून</a>
+        <a href="#" class="sf-topic">राजकारण</a>
+        <a href="#" class="sf-topic">बिझनेस न्यूज</a>
+        <a href="#" class="sf-topic">तंत्रज्ञान</a>
+        <a href="#" class="sf-topic">मनोरंजन</a>
+        <a href="#" class="sf-topic">क्रीडा</a>
+        <a href="#" class="sf-topic">शिक्षण</a>
+      </div>
+      <button class="sf-topics-scroll-btn right" onclick="scrollPills('sf-trending-list', 300)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+
+    <!-- LATEST SECTION -->
+    <div class="sf-topics sf-mt">
+      <div class="sf-topics-header">
+        <div class="sf-topics-title">ताज्या बातम्या</div>
+      </div>
+      <button class="sf-topics-scroll-btn left" onclick="scrollPills('sf-latest-list', -300)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="sf-topics-list" id="sf-latest-list">
+        <a href="#" class="sf-topic">ब्रेकिंग न्यूज</a>
+        <a href="#" class="sf-topic">लाईव्ह अपडेट्स</a>
+        <a href="#" class="sf-topic">महाराष्ट्र बातम्या</a>
+        <a href="#" class="sf-topic">मुंबई बातम्या</a>
+        <a href="#" class="sf-topic">भारत बातम्या</a>
+        <a href="#" class="sf-topic">जगातील बातम्या</a>
+        <a href="#" class="sf-topic">बिझनेस न्यूज</a>
+        <a href="#" class="sf-topic">क्रीडा बातम्या</a>
+        <a href="#" class="sf-topic">लाईफस्टाईल न्यूज</a>
+      </div>
+      <button class="sf-topics-scroll-btn right" onclick="scrollPills('sf-latest-list', 300)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+
+    <!-- APP & SOCIAL -->
+    <div class="sf-app-social">
+      <div class="sf-app-dl">
+        <div class="sf-app-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        </div>
+        <div class="sf-app-info">
+          <div class="sf-app-title">SHLOK Marathi News App</div>
+          <div class="sf-app-sub">ताज्या बातम्या आता आपल्या मोबाईलवर</div>
+        </div>
+        <div class="sf-app-badges">
+          <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" height="36"></a>
+          <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" height="36"></a>
+        </div>
+      </div>
+      <div class="sf-social">
+        <div class="sf-social-title">आम्हाला फॉलो करा</div>
+        <div class="sf-social-list">
+          <a href="#" class="sf-social-icon" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+          <a href="#" class="sf-social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+          <a href="#" class="sf-social-icon sf-x" aria-label="X">𝕏</a>
+          <a href="#" class="sf-social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
+          <a href="#" class="sf-social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- COPYRIGHT BAR -->
+    <div class="sf-copyright">
+      <div class="sf-copy-left">&copy; 2026 Shlok Marathi News. सर्व हक्क राखीव.</div>
+      <div class="sf-copy-center">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Cookies Policy</a>
+      </div>
+      <div class="sf-copy-right">Made for Maharashtra &bull; India</div>
+    </div>
+
+  </div>
+</footer>
+  </body>
+
+</html>

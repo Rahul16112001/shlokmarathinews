@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Story Studio - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <link rel="stylesheet" href="css/admin-editor.css?v=2.6.0">
+    <script>
+        try {
+            const savedTheme = localStorage.getItem('admin_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav"></nav>
+            <div class="sidebar-footer"></div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <a href="articles.html" class="btn btn-secondary btn-sm" style="gap: 6px;">
+                        <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Articles
+                    </a>
+                    <span id="story-mode-badge" style="font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 99px; background: var(--admin-surface-hover); border: 1px solid var(--admin-border); color: var(--admin-text-muted);">
+                        Drafting
+                    </span>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-secondary" id="btn-save-draft">
+                        <i data-lucide="file-down" style="width: 15px; height: 15px;"></i> Save Draft
+                    </button>
+                    <button class="btn btn-primary" id="btn-publish">
+                        <i data-lucide="send" style="width: 15px; height: 15px;"></i> Publish Story
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar" id="admin-avatar-initial">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper editor-wrapper">
+                <div id="editor-alert" class="alert"></div>
+
+                <div class="editor-grid">
+                    
+                    <div class="editor-canvas">
+                        
+                        <div class="editor-field-group">
+                            <div class="editor-field-label">
+                                <span>Headline / Title (मराठी)</span>
+                                <span id="title-word-count" style="font-size: 11.5px; color: var(--admin-text-muted);">0 words</span>
+                            </div>
+                            <input type="text" id="article-title" class="editor-headline-input" placeholder="Enter compelling story headline..." required>
+                        </div>
+
+                        <div class="editor-permalink-bar">
+                            <span class="editor-permalink-prefix">shlokmarathinews.com/article/</span>
+                            <input type="text" id="article-slug" class="editor-slug-input" placeholder="story-url-slug">
+                        </div>
+
+                        <div class="editor-field-group">
+                            <div class="editor-field-label">
+                                <span>Lead Summary / Subtitle</span>
+                                <span style="font-size: 11.5px; color: var(--admin-text-muted);">Used for search previews & mobile cards</span>
+                            </div>
+                            <textarea id="article-excerpt" class="editor-excerpt-textarea" rows="2" placeholder="Briefly summarize the core story in 1-2 concise sentences..."></textarea>
+                        </div>
+
+                        <div class="editor-field-group" style="margin-top: 4px;">
+                            <div class="editor-field-label">
+                                <span>Story Body</span>
+                                <span id="body-word-count" style="font-size: 11.5px; color: var(--admin-text-muted);">0 words</span>
+                            </div>
+
+                            <div class="editor-toolbar" id="editor-toolbar">
+                                <button type="button" class="tb-btn" data-cmd="bold" title="Bold (Ctrl+B)">
+                                    <i data-lucide="bold" style="width: 15px; height: 15px;"></i>
+                                </button>
+                                <button type="button" class="tb-btn" data-cmd="italic" title="Italic (Ctrl+I)">
+                                    <i data-lucide="italic" style="width: 15px; height: 15px;"></i>
+                                </button>
+                                <button type="button" class="tb-btn" data-cmd="underline" title="Underline">
+                                    <i data-lucide="underline" style="width: 15px; height: 15px;"></i>
+                                </button>
+
+                                <span class="tb-sep"></span>
+
+                                <button type="button" class="tb-btn" data-cmd="h2" title="Heading 2">
+                                    <strong style="font-size: 13px;">H2</strong>
+                                </button>
+                                <button type="button" class="tb-btn" data-cmd="h3" title="Heading 3">
+                                    <strong style="font-size: 12px;">H3</strong>
+                                </button>
+
+                                <span class="tb-sep"></span>
+
+                                <button type="button" class="tb-btn" data-cmd="list" title="Bullet List">
+                                    <i data-lucide="list" style="width: 15px; height: 15px;"></i>
+                                </button>
+                                <button type="button" class="tb-btn" data-cmd="quote" title="Blockquote">
+                                    <i data-lucide="quote" style="width: 15px; height: 15px;"></i>
+                                </button>
+                                <button type="button" class="tb-btn" data-cmd="link" title="Insert Link">
+                                    <i data-lucide="link" style="width: 15px; height: 15px;"></i>
+                                </button>
+                            </div>
+
+                            <textarea id="article-content" class="editor-textarea" placeholder="Write your full story here with paragraphs, quotes, and insights..."></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="editor-sidebar-deck">
+
+                        <div class="editor-card">
+                            <div class="editor-card-header">
+                                <div class="editor-card-title">
+                                    <i data-lucide="send" style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+                                    <span>Publishing Workflow</span>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 16px;">
+                                <label class="form-label" style="margin-bottom: 6px; display: block;">Publication Status</label>
+                                <select id="article-status" class="cms-select" style="width: 100%;">
+                                    <option value="draft">Draft (Unpublished)</option>
+                                    <option value="published">Published (Live on Site)</option>
+                                    <option value="archived">Archived (Hidden)</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; margin-bottom: 18px;">
+                                <div class="editor-flag-item">
+                                    <div class="editor-flag-info">
+                                        <span class="editor-flag-name">Featured Story</span>
+                                        <span class="editor-flag-desc">Lead headline on portal homepage</span>
+                                    </div>
+                                    <label class="saas-toggle">
+                                        <input type="checkbox" id="is-featured">
+                                        <span class="toggle-track"></span>
+                                    </label>
+                                </div>
+
+                                <div class="editor-flag-item">
+                                    <div class="editor-flag-info">
+                                        <span class="editor-flag-name" style="color: #ef4444;">Breaking News</span>
+                                        <span class="editor-flag-desc">Urgent ticker and push banner</span>
+                                    </div>
+                                    <label class="saas-toggle">
+                                        <input type="checkbox" id="is-breaking">
+                                        <span class="toggle-track"></span>
+                                    </label>
+                                </div>
+
+                                <div class="editor-flag-item">
+                                    <div class="editor-flag-info">
+                                        <span class="editor-flag-name">Trending News</span>
+                                        <span class="editor-flag-desc">Boost in viral recommended feed</span>
+                                    </div>
+                                    <label class="saas-toggle">
+                                        <input type="checkbox" id="is-trending">
+                                        <span class="toggle-track"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="btn-publish-sidebar" style="width: 100%; padding: 11px;">
+                                <i data-lucide="send" style="width: 15px; height: 15px;"></i> Publish Story
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btn-save-draft-sidebar" style="width: 100%; margin-top: 8px; padding: 10px;">
+                                <i data-lucide="file-down" style="width: 15px; height: 15px;"></i> Save as Draft
+                            </button>
+                        </div>
+
+                        <div class="editor-card">
+                            <div class="editor-card-header">
+                                <div class="editor-card-title">
+                                    <i data-lucide="folder" style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+                                    <span>Editorial Desk</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label" style="margin-bottom: 6px; display: block;">Category</label>
+                                <select id="article-category" class="cms-select" style="width: 100%;">
+                                    <option value="">Select a category...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="editor-card">
+                            <div class="editor-card-header">
+                                <div class="editor-card-title">
+                                    <i data-lucide="image" style="width: 16px; height: 16px; color: var(--admin-primary);"></i>
+                                    <span>Featured Cover</span>
+                                </div>
+                            </div>
+
+                            <div class="image-upload-area" id="image-upload-area">
+                                <div id="image-preview" class="editor-preview-container" style="display: none; margin-bottom: 12px;">
+                                    <img src="" alt="Preview" id="preview-img-el" class="editor-preview-img">
+                                    <button class="btn btn-danger btn-sm" type="button" id="btn-remove-image" style="position: absolute; top: 8px; right: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+                                        <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i> Remove
+                                    </button>
+                                </div>
+
+                                <div id="image-upload-prompt" class="editor-dropzone">
+                                    <i data-lucide="upload-cloud" style="width: 30px; height: 30px; color: var(--admin-primary); margin-bottom: 8px; display: inline-block;"></i>
+                                    <p style="font-size: 13.5px; color: var(--admin-text-main); font-weight: 600; margin: 0 0 4px 0;">Click or drag image here</p>
+                                    <p style="font-size: 11.5px; color: var(--admin-text-muted); margin: 0;">JPG, PNG, WebP (16:9 ratio recommended)</p>
+                                    <input type="file" id="article-image" accept="image/*" style="display: none;">
+                                </div>
+                            </div>
+                            <input type="hidden" id="article-image-url">
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin-supabase.js?v=2.6.0"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js?v=2.6.0"></script>
+    <script src="js/admin-editor.js?v=2.6.0"></script>
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

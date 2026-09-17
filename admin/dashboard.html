@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>try{const t=localStorage.getItem('admin_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="layout-dashboard"></i></span> Dashboard
+                </a>
+                <a href="articles.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="file-text"></i></span> Articles
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="folder"></i></span> Categories
+                </a>
+                <a href="videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="video"></i></span> Videos
+                </a>
+                <a href="short-videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="smartphone"></i></span> Short Videos
+                </a>
+                <a href="breaking-news.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="radio"></i></span> Breaking News
+                </a>
+                <a href="gallery.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="image"></i></span> Gallery
+                </a>
+                <a href="live-tv.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="tv"></i></span> Live TV
+                </a>
+                <a href="users.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="users"></i></span> Users & Team
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="settings"></i></span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" style="width:100%; border:none; background:transparent; justify-content: flex-start; margin:0;" onclick="adminLogout()">
+                    <span class="icon-box"><i data-lucide="log-out"></i></span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" placeholder="Search articles, authors, categories...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <a href="article-editor.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                        <i data-lucide="plus" style="width:16px;height:16px;margin-right:6px;"></i> Create
+                    </a>
+                    <button class="icon-btn">
+                        <i data-lucide="bell"></i>
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="name" id="admin-name">Admin User</span>
+                            <span class="role">Administrator</span>
+                        </div>
+                        <div class="user-avatar" id="admin-avatar-initial">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+                    <div class="page-header-text">
+                        <h1 id="greeting" style="font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.25rem;">Dashboard</h1>
+                        <p style="color: #6b7280; font-size: 0.875rem;">Here's what's happening across your newsroom today.</p>
+                    </div>
+                    <div>
+                        <span class="header-date-pill">
+                            <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+                            <span id="header-date"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 32px; width: 100%;">
+
+                    <!-- Card 1: Blue -->
+                    <div class="dash-stat-card">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 55%; height: 80px; z-index: 0; pointer-events: none;">
+                            <svg viewBox="0 0 150 80" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                                <defs>
+                                    <linearGradient id="bgBlueFinal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/></linearGradient>
+                                    <linearGradient id="lineBlueFinal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0"/><stop offset="35%" stop-color="#3b82f6" stop-opacity="1"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="1"/></linearGradient>
+                                </defs>
+                                <path d="M 0,80 L 0,60 C 40,70 100,20 150,30 L 150,80 Z" fill="url(#bgBlueFinal)"></path>
+                                <path d="M 0,60 C 40,70 100,20 150,30" fill="none" stroke="url(#lineBlueFinal)" stroke-width="3" stroke-linecap="round" style="filter: drop-shadow(0px 4px 6px rgba(59,130,246,0.4));"></path>
+                            </svg>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; position: relative; z-index: 1;">
+                            <div>
+                                <h3 style="font-size: 14px; font-weight: 700; color: var(--admin-text-muted); margin: 0 0 4px 0; letter-spacing: 0.5px;">Total Articles</h3>
+                                <div id="stat-articles" class="dash-stat-value">11</div>
+                            </div>
+                            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: auto; position: relative; z-index: 1;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 12px; padding: 6px 12px; border-radius: 10px; font-weight: 700;">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"></path></svg> 12.5% this week
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Orange -->
+                    <div class="dash-stat-card">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 55%; height: 80px; z-index: 0; pointer-events: none;">
+                            <svg viewBox="0 0 150 80" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                                <defs>
+                                    <linearGradient id="bgOrangeFinal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/></linearGradient>
+                                    <linearGradient id="lineOrangeFinal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0"/><stop offset="35%" stop-color="#f59e0b" stop-opacity="1"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="1"/></linearGradient>
+                                </defs>
+                                <path d="M 0,80 L 0,55 C 50,35 100,70 150,25 L 150,80 Z" fill="url(#bgOrangeFinal)"></path>
+                                <path d="M 0,55 C 50,35 100,70 150,25" fill="none" stroke="url(#lineOrangeFinal)" stroke-width="3" stroke-linecap="round" style="filter: drop-shadow(0px 4px 6px rgba(245,158,11,0.4));"></path>
+                            </svg>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; position: relative; z-index: 1;">
+                            <div>
+                                <h3 style="font-size: 14px; font-weight: 700; color: var(--admin-text-muted); margin: 0 0 4px 0; letter-spacing: 0.5px;">Total Views</h3>
+                                <div id="stat-views" class="dash-stat-value">8</div>
+                            </div>
+                            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: auto; position: relative; z-index: 1;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 12px; padding: 6px 12px; border-radius: 10px; font-weight: 700;">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"></path></svg> 8.2% this week
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Red (Alerts) -->
+                    <div class="dash-stat-card">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 55%; height: 80px; z-index: 0; pointer-events: none;">
+                            <svg viewBox="0 0 150 80" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                                <defs>
+                                    <linearGradient id="bgRedFinal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient>
+                                    <linearGradient id="lineRedFinal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ef4444" stop-opacity="0"/><stop offset="35%" stop-color="#ef4444" stop-opacity="1"/><stop offset="100%" stop-color="#ef4444" stop-opacity="1"/></linearGradient>
+                                </defs>
+                                <path d="M 0,80 L 0,60 C 30,30 60,70 100,20 S 130,40 150,30 L 150,80 Z" fill="url(#bgRedFinal)"></path>
+                                <path d="M 0,60 C 30,30 60,70 100,20 S 130,40 150,30" fill="none" stroke="url(#lineRedFinal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0px 4px 6px rgba(239,68,68,0.4));"></path>
+                            </svg>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; position: relative; z-index: 1;">
+                            <div>
+                                <h3 style="font-size: 14px; font-weight: 700; color: var(--admin-text-muted); margin: 0 0 4px 0; letter-spacing: 0.5px;">Breaking Alerts</h3>
+                                <div id="stat-breaking" class="dash-stat-value">4</div>
+                            </div>
+                            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(220, 38, 38, 0.15); color: #ef4444; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: auto; position: relative; z-index: 1;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(220, 38, 38, 0.1); color: #ef4444; font-size: 12px; padding: 6px 12px; border-radius: 10px; font-weight: 700;">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> Active now
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Pink -->
+                    <div class="dash-stat-card">
+                        <div style="position: absolute; bottom: 0; right: 0; width: 55%; height: 80px; z-index: 0; pointer-events: none;">
+                            <svg viewBox="0 0 150 80" preserveAspectRatio="none" style="width: 100%; height: 100%; display: block;">
+                                <defs>
+                                    <linearGradient id="bgPinkFinal" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0"/></linearGradient>
+                                    <linearGradient id="linePinkFinal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ec4899" stop-opacity="0"/><stop offset="35%" stop-color="#ec4899" stop-opacity="1"/><stop offset="100%" stop-color="#ec4899" stop-opacity="1"/></linearGradient>
+                                </defs>
+                                <path d="M 0,80 L 0,45 C 50,60 100,10 150,25 L 150,80 Z" fill="url(#bgPinkFinal)"></path>
+                                <path d="M 0,45 C 50,60 100,10 150,25" fill="none" stroke="url(#linePinkFinal)" stroke-width="3" stroke-linecap="round" style="filter: drop-shadow(0px 4px 6px rgba(236,72,153,0.4));"></path>
+                            </svg>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; position: relative; z-index: 1;">
+                            <div>
+                                <h3 style="font-size: 14px; font-weight: 700; color: var(--admin-text-muted); margin: 0 0 4px 0; letter-spacing: 0.5px;">Short Videos</h3>
+                                <div id="stat-short-videos" class="dash-stat-value">4</div>
+                            </div>
+                            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(236, 72, 153, 0.15); color: #ec4899; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: auto; position: relative; z-index: 1;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 12px; padding: 6px 12px; border-radius: 10px; font-weight: 700;">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10"></path></svg> 5.1% this month
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ═══════════ ROW 2: ANALYTICS SECTION (Asymmetric 2-Col) ═══════════ -->
+                <div class="bento-analytics">
+                    <!-- Left: Traffic Overview Chart Area -->
+                    <div class="analytics-chart-card">
+                        <div class="chart-card-header">
+                            <div>
+                                <h3 class="chart-title">Traffic Overview</h3>
+                                <p class="chart-subtitle">Article views & engagement this month</p>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-dot" style="background:#3b82f6;"></span> Views
+                                <span class="legend-dot" style="background:#10b981; margin-left:16px;"></span> Published
+                            </div>
+                        </div>
+                        <div class="chart-area">
+                            <!-- CSS-only sparkline mockup -->
+                            <div class="chart-grid-lines">
+                                <div class="grid-line"></div>
+                                <div class="grid-line"></div>
+                                <div class="grid-line"></div>
+                                <div class="grid-line"></div>
+                                <div class="grid-line"></div>
+                            </div>
+                            <svg class="sparkline-svg" viewBox="0 0 600 200" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>
+                                        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.01"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M0,160 C30,140 60,120 100,100 C140,80 170,60 210,70 C250,80 280,50 320,30 C360,10 400,40 440,60 C480,80 520,50 560,40 L600,35 L600,200 L0,200 Z" fill="url(#sparkGrad)"/>
+                                <path d="M0,160 C30,140 60,120 100,100 C140,80 170,60 210,70 C250,80 280,50 320,30 C360,10 400,40 440,60 C480,80 520,50 560,40 L600,35" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" style="filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.3));" />
+                                <path d="M0,180 C40,170 80,150 130,140 C180,130 220,120 270,110 C320,100 370,90 420,100 C470,110 520,90 570,85 L600,80" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="6 4" stroke-linecap="round" opacity="0.7" style="filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.3));" />
+                            </svg>
+                            <!-- Inline stat overlays -->
+                            <div class="chart-inline-stats">
+                                <div class="inline-stat">
+                                    <span class="inline-stat-value" id="stat-published">--</span>
+                                    <span class="inline-stat-label">Published</span>
+                                </div>
+                                <div class="inline-stat">
+                                    <span class="inline-stat-value" id="stat-videos">--</span>
+                                    <span class="inline-stat-label">Videos</span>
+                                </div>
+                                <div class="inline-stat">
+                                    <span class="inline-stat-value" id="stat-published-videos">--</span>
+                                    <span class="inline-stat-label">Live Videos</span>
+                                </div>
+                                <div class="inline-stat">
+                                    <span class="inline-stat-value" id="stat-video-views">--</span>
+                                    <span class="inline-stat-label">Video Views</span>
+                                </div>
+                                <div class="inline-stat">
+                                    <a href="users.html" style="text-decoration: none;">
+                                        <span class="inline-stat-value" id="stat-users" style="color: #4f46e5;">--</span>
+                                        <span class="inline-stat-label" style="color: #4f46e5;">Users &rarr;</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Live Newsroom Feed (Dark Card) -->
+                    <div class="live-feed-card">
+                        <div class="live-feed-header">
+                            <div class="live-badge">
+                                <span class="live-dot"></span> LIVE FEED
+                            </div>
+                            <span class="live-feed-subtitle">Breaking News</span>
+                        </div>
+                        <div class="live-feed-body" id="live-news-feed">
+                            <!-- Dynamic -->
+                            <div class="skeleton skeleton-text" style="height: 60px; background: rgba(255,255,255,0.05);"></div>
+                            <div class="skeleton skeleton-text" style="height: 60px; background: rgba(255,255,255,0.05);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══════════ ROW 3: RICH CONTENT TABLE (Full Width) ═══════════ -->
+                <!-- ULTIMATE SPLIT LAYOUT: Articles (Left) + New Widget (Right) -->
+                <style>
+                    .split-dashboard-grid {
+                        display: grid;
+                        grid-template-columns: 2fr 1fr;
+                        gap: 24px;
+                        width: 100%;
+                        margin-bottom: 40px;
+                        align-items: flex-start;
+                    }
+                    /* Responsive rule: stack on smaller screens */
+                    @media (max-width: 1024px) {
+                        .split-dashboard-grid { grid-template-columns: 1fr; }
+                    }
+                    .v-row {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 16px 20px;
+                        margin: 4px 8px;
+                        border-radius: 12px;
+                        background: transparent;
+                        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                        position: relative;
+                        cursor: pointer;
+                    }
+                    /* The sleek Vercel-style left accent line */
+                    .v-row::before {
+                        content: '';
+                        position: absolute;
+                        left: -8px;
+                        top: 50%;
+                        transform: translateY(-50%) scaleY(0.3);
+                        height: 50%;
+                        width: 3px;
+                        background: #3b82f6;
+                        border-radius: 0 4px 4px 0;
+                        opacity: 0;
+                        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                    .v-row:hover {
+                        background: var(--admin-surface-hover);
+                        transform: translateX(4px);
+                    }
+                    .v-row:hover::before {
+                        opacity: 1;
+                        transform: translateY(-50%) scaleY(1);
+                    }
+                    
+                    .v-action {
+                        opacity: 0;
+                        transform: translateX(-10px);
+                        transition: all 0.25s ease;
+                        background: var(--admin-surface);
+                        border: 1px solid var(--admin-border);
+                        padding: 8px;
+                        border-radius: 10px;
+                        color: var(--admin-text-muted);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                        display: flex; align-items: center; justify-content: center;
+                    }
+                    .v-row:hover .v-action {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                    .v-action:hover {
+                        color: #3b82f6;
+                        border-color: #3b82f6;
+                        background: var(--admin-surface-hover);
+                    }
+
+                    @keyframes livePulse {
+                        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+                        70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+                        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+                    }
+                    .live-dot {
+                        width: 8px; height: 8px; border-radius: 50%; background: #10b981;
+                        animation: livePulse 2s infinite;
+                    }
+                    .author-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 12px 0;
+                        border-bottom: 1px solid var(--admin-border);
+                    }
+                    .author-item:last-child { border-bottom: none; }
+                </style>
+
+                <div class="split-dashboard-grid">
+                    
+                    <!-- ========================================== -->
+                    <!-- LEFT SIDE: RECENT ARTICLES (2/3 WIDTH)     -->
+                    <!-- ========================================== -->
+                    <!-- ========================================== -->
+                    <!-- LEFT SIDE: RECENT ARTICLES (2/3 WIDTH)     -->
+                    <!-- ========================================== -->
+                    <div class="dash-card">
+                        
+                        <!-- Header -->
+                        <div style="padding: 24px 32px; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center; background: var(--admin-surface);">
+                            <div>
+                                <h2 style="margin: 0; font-size: 18px; font-weight: 800; color: var(--admin-text-main); letter-spacing: -0.3px;">Recent Articles</h2>
+                                <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--admin-text-muted); font-weight: 500;">Latest published content</p>
+                            </div>
+                            <a href="articles.html" style="display: inline-flex; align-items: center; gap: 4px; color: #3b82f6; font-size: 13px; font-weight: 700; text-decoration: none; padding: 8px 16px; background: rgba(59, 130, 246, 0.1); border-radius: 99px; transition: background 0.2s;">
+                                View all <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                            </a>
+                        </div>
+
+                        <!-- List -->
+                        <div id="recent-articles-list" style="padding: 8px 0;">
+                            
+                            <!-- Skeleton Row -->
+                            <div class="v-row">
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div class="skeleton skeleton-text" style="width: 48px; height: 48px; border-radius: 14px; margin: 0; flex-shrink: 0;"></div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        <div class="skeleton skeleton-text" style="height: 15px; width: 250px; margin: 0;"></div>
+                                        <div class="skeleton skeleton-text" style="height: 13px; width: 150px; margin: 0;"></div>
+                                    </div>
+                                </div>
+                                <div class="skeleton skeleton-text" style="width: 36px; height: 36px; border-radius: 10px; margin: 0;"></div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ========================================== -->
+                    <!-- RIGHT SIDE: NEW WIDGET (1/3 WIDTH)         -->
+                    <!-- ========================================== -->
+                    <div class="dash-card" style="padding: 24px;">
+                        
+                        <!-- Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--admin-text-main);">Top Reporters</h2>
+                            <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">This Month</span>
+                        </div>
+
+                        <!-- Authors List -->
+                        <div style="display: flex; flex-direction: column;">
+                            
+                            <!-- Reporter 1 -->
+                            <div class="author-item">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 6px rgba(59,130,246,0.2);">
+                                        SP
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #1e293b;">Sanjay Patil</h4>
+                                        <p style="margin: 0; font-size: 12px; color: #64748b;">Senior Editor</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--admin-text-main);">42</div>
+                                    <div style="font-size: 10px; color: var(--admin-text-muted); font-weight: 600; text-transform: uppercase;">Articles</div>
+                                </div>
+                            </div>
+
+                            <!-- Reporter 2 -->
+                            <div class="author-item">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 6px rgba(245,158,11,0.2);">
+                                        AD
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--admin-text-main);">Aditi Deshmukh</h4>
+                                        <p style="margin: 0; font-size: 12px; color: var(--admin-text-muted);">Reporter</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--admin-text-main);">28</div>
+                                    <div style="font-size: 10px; color: var(--admin-text-muted); font-weight: 600; text-transform: uppercase;">Articles</div>
+                                </div>
+                            </div>
+
+                            <!-- Reporter 3 -->
+                            <div class="author-item">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #ec4899, #db2777); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 6px rgba(236,72,153,0.2);">
+                                        RK
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--admin-text-main);">Rahul Kadam</h4>
+                                        <p style="margin: 0; font-size: 12px; color: var(--admin-text-muted);">Journalist</p>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 15px; font-weight: 800; color: var(--admin-text-main);">19</div>
+                                    <div style="font-size: 10px; color: var(--admin-text-muted); font-weight: 600; text-transform: uppercase;">Articles</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/admin-supabase.js"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+        // Dynamic greeting
+        const hr = new Date().getHours();
+        const greeting = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+        document.getElementById('greeting').innerHTML = `${greeting}, <span style="color:var(--admin-primary);">Admin</span>`;
+        // Date pill
+        document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+    </script>
+</body>
+</html>
+

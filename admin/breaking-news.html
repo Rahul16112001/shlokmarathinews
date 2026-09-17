@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breaking News - Shlok Marathi News Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css?v=2.6.5">
+    <script>try{const t=localStorage.getItem('admin_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assits/shlokmrathi news logo.png" alt="Logo">
+                <span>CMS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="layout-dashboard"></i></span> Dashboard
+                </a>
+                <a href="articles.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="file-text"></i></span> Articles
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="folder"></i></span> Categories
+                </a>
+                <a href="videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="video"></i></span> Videos
+                </a>
+                <a href="short-videos.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="smartphone"></i></span> Short Videos
+                </a>
+                <a href="breaking-news.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="radio"></i></span> Breaking News
+                </a>
+                <a href="gallery.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="image"></i></span> Gallery
+                </a>
+                <a href="live-tv.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="tv"></i></span> Live TV
+                </a>
+                <a href="users.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="users"></i></span> Users & Team
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <span class="icon-box"><i data-lucide="settings"></i></span> Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" style="width:100%; border:none; background:transparent; justify-content: flex-start; margin:0;" onclick="adminLogout()">
+                    <span class="icon-box"><i data-lucide="log-out"></i></span> Logout
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="global-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" placeholder="Search alerts...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button id="btn-create-alert" class="btn btn-primary" style="padding: 0.5rem 1.15rem; font-weight: 600; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        Create Alert
+                    </button>
+                    <div class="user-profile">
+                        <div class="user-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h1 style="margin: 0 0 6px 0; font-size: 26px; font-weight: 800; color: var(--admin-text-main); letter-spacing: -0.5px;">Breaking News Ticker</h1>
+                        <p style="margin: 0; font-size: 14px; color: var(--admin-text-muted);">Manage real-time flashing headlines displayed across the reader portal header.</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--admin-surface); border: 1px solid var(--admin-border); border-radius: 16px; box-shadow: var(--admin-card-shadow); overflow: hidden;">
+                    <div style="overflow-x: auto;">
+                        <table id="breaking-table" style="width: 100%; border-collapse: collapse; text-align: left; min-width: 800px;">
+                            <thead>
+                                <tr style="background: var(--admin-surface-hover); border-bottom: 1px solid var(--admin-border);">
+                                    <th style="padding: 16px 24px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Flash Headline</th>
+                                    <th style="padding: 16px 24px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.5px; width: 150px;">Status</th>
+                                    <th style="padding: 16px 24px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.5px; width: 160px;">Broadcast Date</th>
+                                    <th style="padding: 16px 24px; font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: right; width: 120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breaking-tbody">
+                                <tr><td colspan="4"><div class="skeleton skeleton-text" style="height:40px; margin:20px;"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Breaking News Edit Form Modal -->
+                <div id="breaking-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+                    <div class="modal-content" style="background:var(--admin-surface); padding:2rem; border-radius:8px; width:500px; max-width:90%;">
+                        <h2 id="breaking-modal-title" style="margin-bottom:1rem; font-size:1.25rem; font-weight:600;">Create Alert</h2>
+                        <form id="breaking-form">
+                            <input type="hidden" id="breaking-id">
+                            
+                            <div class="form-group" style="margin-bottom:1rem;">
+                                <label for="breaking-title" style="display:block; margin-bottom:0.5rem; font-weight:500;">Headline</label>
+                                <input type="text" id="breaking-title" class="form-control" required style="width:100%; padding:0.5rem; border:1px solid var(--admin-border); border-radius:4px;">
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem;">
+                                <input type="checkbox" id="breaking-active" style="width:16px; height:16px;">
+                                <label for="breaking-active" style="font-weight:500; cursor:pointer;">Is Active (Live)</label>
+                            </div>
+                            
+                            <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                                <button type="button" id="btn-close-modal" class="btn" style="padding:0.5rem 1rem; border:1px solid var(--admin-border); background:var(--admin-bg); cursor:pointer; border-radius:4px;">Cancel</button>
+                                <button type="submit" class="btn btn-primary" style="padding:0.5rem 1rem;">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="js/admin-supabase.js"></script>
+    <script src="js/admin-auth.js?v=2.6.4"></script>
+    <script src="js/admin-nav.js"></script>
+    <script src="js/admin-breaking-news.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
+
