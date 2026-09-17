@@ -678,11 +678,15 @@ button {
   width: 100%;
 }
 
+.sidebar-header img,
 .brand-logo {
-  height: 32px;
-  width: 32px;
+  height: 32px !important;
+  width: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
   object-fit: contain;
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .brand-text-col {

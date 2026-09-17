@@ -22,7 +22,7 @@ function syncSidebarNav() {
     if (sidebarHeader && !sidebarHeader.querySelector('.brand-badge-row')) {
         sidebarHeader.innerHTML = `
             <div class="brand-badge-row">
-                <img src="../assits/shlokmrathi news logo.png" alt="Shlok Logo" class="brand-logo">
+                <img src="../assits/shlok-logo-sm.png" alt="Shlok Logo" class="brand-logo" width="32" height="32" style="width:32px;height:32px;object-fit:contain;">
                 <div class="brand-text-col">
                     <span class="brand-title">SHLOK NEWS</span>
                     <span class="brand-tag">Newsroom CMS</span>
